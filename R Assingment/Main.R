@@ -8,7 +8,9 @@ library(tidyverse)
 library(caret)
 
 # Data import
-file_path <- "C:/Users/Wajiz.pk/Downloads/5. credit_risk_classification.csv"
+file_path <- "./data/credit_risk_classification.csv"
+credit_data <- read.csv(file_path, row.names = 1, stringsAsFactors = TRUE)
+
 credit_data <- read_csv(file_path)
 
 # Data cleaning/pre-processing (remove rows with missing values)
