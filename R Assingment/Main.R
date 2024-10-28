@@ -10,10 +10,12 @@ library(caret)
 
 
 ### Data Preparation
-# Data import
+## Data import
 file_path <- "./data/credit_risk_classification.csv"
 df <- read.csv(file_path, row.names = 1, stringsAsFactors = TRUE)
 
+
+## Cleaning and Preprocessing
 # Remove Duplicates
 duplicate_rows <- df[duplicated(df), ]
 cat("Number of duplicate rows:", nrow(duplicate_rows), "\n")
