@@ -3,30 +3,73 @@
 # Jaeden Loong Deng Ze, TP068347
 # Muhammad Hadi, TP077049
 
+
 # Load necessary libraries
 library(tidyverse)
 library(caret)
 
+
+### Data Preparation
 # Data import
 file_path <- "./data/credit_risk_classification.csv"
 df <- read.csv(file_path, row.names = 1, stringsAsFactors = TRUE)
 
-# Data cleaning/pre-processing (remove rows with missing values)
-df <- df %>%
-  drop_na()
+# Remove Duplicates
+duplicate_rows <- df[duplicated(df), ]
+cat("Number of duplicate rows:", nrow(duplicate_rows), "\n")
+df <- df |> distinct()
 
-# Further pre-processing: Convert necessary columns to appropriate data types
-df <- df %>%
-  mutate(
-    installment_commitment = as.numeric(installment_commitment),  # Convert to numeric
-    class = as.factor(class),  # Convert to factor for classification
-    age = as.numeric(age),  # Ensure age is numeric
-    duration = as.numeric(duration),  # Ensure loan duration is numeric
-    existing_credits = as.numeric(existing_credits)  # Change for feature 3: existing credits
+# Missing Data Summary
+missing_data_count <- df |>
+  summarize(across(everything(), ~ sum(is.na(.)))) |>
+  pivot_longer(
+    everything(),
+    names_to = "column",
+    values_to = "missing_count"
   )
 
-# Display the first few rows of cleaned data
-View(head(df, 100))  # Displays the first 100 rows after cleaning
+missing_data_percentage <- df |>
+  summarize(across(everything(), ~ mean(is.na(.)) * 100)) |>
+  pivot_longer(
+    everything(),
+    names_to = "column",
+    values_to = "missing_percentage"
+  )
+
+missing_data_combined <- merge(
+  missing_data_count,
+  missing_data_percentage,
+  by = "column"
+)
+
+print("Missing Data Summary:")
+missing_data_combined
+
+# Remove rows with missing data
+df <- df |>
+  drop_na()
+
+# Trim Whitespace
+df <- df |> mutate(across(where(is.character), ~ trimws(.)))
+
+# Column Types
+ranged_columns <- c("checking_status", "savings_status", "employment")
+unique_ranged_values <- sapply(df[ranged_columns], unique)
+for (col in ranged_columns) {
+  df[[col]] <- ordered(df[[col]], levels = unique_ranged_values[[col]])
+}
+
+# List All Numeric Columnns For Later Use
+numeric_columns <- df |>
+  select(where(is.numeric)) |>
+  colnames()
+
+# Print Column Types To Check
+print("Column Types:")
+sapply(df, class)
+
+# Display the first 100 rows of cleaned data
+View(head(df, 100))
 
 
 ### Objective 1: Objective 1: To investigate the relationship between installment commitment and credit class. – Muhammad Hadi, TP077049
@@ -39,9 +82,11 @@ cat("Analysis 1-1: Correlation between Installment Commitment and Credit Amount:
 ggplot(df, aes(x = installment_commitment, y = credit_amount)) +
   geom_point() +
   geom_smooth(method = "lm", col = "blue") +
-  labs(title = "Correlation between Installment Commitment and Credit Amount",
-       x = "Installment Commitment",
-       y = "Credit Amount") +
+  labs(
+    title = "Correlation between Installment Commitment and Credit Amount",
+    x = "Installment Commitment",
+    y = "Credit Amount"
+  ) +
   theme_minimal()
 
 ## Analysis 1-2: Logistic Regression for Credit Classification
@@ -55,9 +100,11 @@ summary(logistic_model)
 ggplot(df, aes(x = installment_commitment, y = as.numeric(class) - 1)) +
   geom_point() +
   geom_smooth(method = "glm", method.args = list(family = "binomial"), col = "red") +
-  labs(title = "Logistic Regression of Credit Class based on Installment Commitment",
-       x = "Installment Commitment",
-       y = "Probability of Bad Credit (1)") +
+  labs(
+    title = "Logistic Regression of Credit Class based on Installment Commitment",
+    x = "Installment Commitment",
+    y = "Probability of Bad Credit (1)"
+  ) +
   theme_minimal()
 
 ## Analysis 1-3: Linear Regression for Installment Commitment and Credit Amount
@@ -71,18 +118,22 @@ summary(linear_model)
 ggplot(df, aes(x = installment_commitment, y = credit_amount)) +
   geom_point() +
   geom_smooth(method = "lm", col = "green") +
-  labs(title = "Linear Regression of Credit Amount based on Installment Commitment",
-       x = "Installment Commitment",
-       y = "Credit Amount") +
+  labs(
+    title = "Linear Regression of Credit Amount based on Installment Commitment",
+    x = "Installment Commitment",
+    y = "Credit Amount"
+  ) +
   theme_minimal()
 
 ## Analysis 1-4: Credit Class Distribution by Installment Commitment
 # Distribution of Credit Class based on Installment Commitment
 ggplot(df, aes(x = installment_commitment, fill = class)) +
   geom_histogram(binwidth = 5, position = "dodge") +
-  labs(title = "Distribution of Installment Commitment by Credit Class",
-       x = "Installment Commitment",
-       y = "Count") +
+  labs(
+    title = "Distribution of Installment Commitment by Credit Class",
+    x = "Installment Commitment",
+    y = "Count"
+  ) +
   theme_minimal()
 
 ## Extra Feature Analysis 1-5: Correlation between Age and Installment Commitment
@@ -93,9 +144,11 @@ cat("Analysis 1-5: Correlation between Age and Installment Commitment: ", correl
 # Line plot for the relationship between age and installment commitment
 ggplot(df, aes(x = age, y = installment_commitment, group = 1)) +
   geom_line(col = "purple") +
-  labs(title = "Age vs Installment Commitment (Line Plot)",
-       x = "Age",
-       y = "Installment Commitment") +
+  labs(
+    title = "Age vs Installment Commitment (Line Plot)",
+    x = "Age",
+    y = "Installment Commitment"
+  ) +
   theme_minimal()
 
 ## Extra Feature Analysis 1-6: Loan Duration vs Installment Commitment
@@ -106,9 +159,11 @@ cat("Analysis 2.2: Correlation between Loan Duration and Installment Commitment:
 # Line plot for the relationship between duration and installment commitment
 ggplot(df, aes(x = duration, y = installment_commitment, group = 1)) +
   geom_line(col = "orange") +
-  labs(title = "Loan Duration vs Installment Commitment (Line Plot)",
-       x = "Loan Duration",
-       y = "Installment Commitment") +
+  labs(
+    title = "Loan Duration vs Installment Commitment (Line Plot)",
+    x = "Loan Duration",
+    y = "Installment Commitment"
+  ) +
   theme_minimal()
 
 ## Extra Feature Analysis 1-7: Existing Credits vs Installment Commitment (Line Plot)
@@ -119,9 +174,11 @@ cat("Analysis 2.3: Correlation between Existing Credits and Installment Commitme
 # Line plot for the relationship between existing credits and installment commitment
 ggplot(df, aes(x = existing_credits, y = installment_commitment, group = 1)) +
   geom_line(col = "brown") +
-  labs(title = "Existing Credits vs Installment Commitment (Line Plot)",
-       x = "Number of Existing Credits",
-       y = "Installment Commitment") +
+  labs(
+    title = "Existing Credits vs Installment Commitment (Line Plot)",
+    x = "Number of Existing Credits",
+    y = "Installment Commitment"
+  ) +
   theme_minimal()
 
 # Final output message
