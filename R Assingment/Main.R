@@ -89,6 +89,7 @@ ggplot(df, aes(x = installment_commitment, y = credit_amount)) +
   ) +
   theme_minimal()
 
+
 ## Analysis 1-2: Logistic Regression for Credit Classification
 # Performing logistic regression to see the relationship between installment commitment and credit class
 logistic_model <- glm(class ~ installment_commitment, data = df, family = binomial)
@@ -106,6 +107,7 @@ ggplot(df, aes(x = installment_commitment, y = as.numeric(class) - 1)) +
     y = "Probability of Bad Credit (1)"
   ) +
   theme_minimal()
+
 
 ## Analysis 1-3: Linear Regression for Installment Commitment and Credit Amount
 # Performing linear regression to explore the relationship between installment commitment and credit amount
@@ -125,6 +127,7 @@ ggplot(df, aes(x = installment_commitment, y = credit_amount)) +
   ) +
   theme_minimal()
 
+
 ## Analysis 1-4: Credit Class Distribution by Installment Commitment
 # Distribution of Credit Class based on Installment Commitment
 ggplot(df, aes(x = installment_commitment, fill = class)) +
@@ -135,6 +138,7 @@ ggplot(df, aes(x = installment_commitment, fill = class)) +
     y = "Count"
   ) +
   theme_minimal()
+
 
 ## Extra Feature Analysis 1-5: Correlation between Age and Installment Commitment
 # Correlation analysis
@@ -151,6 +155,7 @@ ggplot(df, aes(x = age, y = installment_commitment, group = 1)) +
   ) +
   theme_minimal()
 
+
 ## Extra Feature Analysis 1-6: Loan Duration vs Installment Commitment
 # Correlation analysis
 correlation_duration_commitment <- cor(df$duration, df$installment_commitment)
@@ -165,6 +170,7 @@ ggplot(df, aes(x = duration, y = installment_commitment, group = 1)) +
     y = "Installment Commitment"
   ) +
   theme_minimal()
+
 
 ## Extra Feature Analysis 1-7: Existing Credits vs Installment Commitment (Line Plot)
 # Correlation analysis
@@ -181,5 +187,7 @@ ggplot(df, aes(x = existing_credits, y = installment_commitment, group = 1)) +
   ) +
   theme_minimal()
 
+
 # Final output message
 cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
+
