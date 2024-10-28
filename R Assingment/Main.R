@@ -1,3 +1,8 @@
+# Lim Wen Yi, TP067930
+# Keith Lo Ze Hui, TP067663
+# Jaeden Loong Deng Ze, TP068347
+# Muhammad Hadi, TP077049
+
 # Load necessary libraries
 library(readr)
 library(dplyr)
@@ -25,10 +30,12 @@ credit_data_clean <- credit_data_clean %>%
 # Display the first few rows of cleaned data
 View(head(credit_data_clean, 100))  # Displays the first 100 rows after cleaning
 
-### Analysis 1.1: Correlation Analysis between 'installment_commitment' and 'credit_amount' ###
+
+### Objective 1: Objective 1: To investigate the relationship between installment commitment and credit class. – Muhammad Hadi, TP077049
+## Analysis 1-1: Correlation Analysis between 'installment_commitment' and 'credit_amount'
 # Calculating the correlation between installment_commitment and credit_amount
 correlation_result <- cor(credit_data_clean$installment_commitment, credit_data_clean$credit_amount)
-cat("Analysis 1.1: Correlation between Installment Commitment and Credit Amount: ", correlation_result, "\n")
+cat("Analysis 1-1: Correlation between Installment Commitment and Credit Amount: ", correlation_result, "\n")
 
 # Plot the correlation
 ggplot(credit_data_clean, aes(x = installment_commitment, y = credit_amount)) +
@@ -39,7 +46,7 @@ ggplot(credit_data_clean, aes(x = installment_commitment, y = credit_amount)) +
        y = "Credit Amount") +
   theme_minimal()
 
-### Analysis 1.2: Logistic Regression for Credit Classification ###
+## Analysis 1-2: Logistic Regression for Credit Classification
 # Performing logistic regression to see the relationship between installment commitment and credit class
 logistic_model <- glm(class ~ installment_commitment, data = credit_data_clean, family = binomial)
 
@@ -55,7 +62,7 @@ ggplot(credit_data_clean, aes(x = installment_commitment, y = as.numeric(class) 
        y = "Probability of Bad Credit (1)") +
   theme_minimal()
 
-### Analysis 1.3: Linear Regression for Installment Commitment and Credit Amount ###
+## Analysis 1-3: Linear Regression for Installment Commitment and Credit Amount
 # Performing linear regression to explore the relationship between installment commitment and credit amount
 linear_model <- lm(credit_amount ~ installment_commitment, data = credit_data_clean)
 
@@ -71,7 +78,7 @@ ggplot(credit_data_clean, aes(x = installment_commitment, y = credit_amount)) +
        y = "Credit Amount") +
   theme_minimal()
 
-### Analysis 1.4: Credit Class Distribution by Installment Commitment ###
+## Analysis 1-4: Credit Class Distribution by Installment Commitment
 # Distribution of Credit Class based on Installment Commitment
 ggplot(credit_data_clean, aes(x = installment_commitment, fill = class)) +
   geom_histogram(binwidth = 5, position = "dodge") +
@@ -80,10 +87,10 @@ ggplot(credit_data_clean, aes(x = installment_commitment, fill = class)) +
        y = "Count") +
   theme_minimal()
 
-### Extra Feature Analysis 2.1: Correlation between Age and Installment Commitment ###
+## Extra Feature Analysis 1-5: Correlation between Age and Installment Commitment
 # Correlation analysis
 correlation_age_commitment <- cor(credit_data_clean$age, credit_data_clean$installment_commitment)
-cat("Analysis 2.1: Correlation between Age and Installment Commitment: ", correlation_age_commitment, "\n")
+cat("Analysis 1-5: Correlation between Age and Installment Commitment: ", correlation_age_commitment, "\n")
 
 # Line plot for the relationship between age and installment commitment
 ggplot(credit_data_clean, aes(x = age, y = installment_commitment, group = 1)) +
@@ -93,7 +100,7 @@ ggplot(credit_data_clean, aes(x = age, y = installment_commitment, group = 1)) +
        y = "Installment Commitment") +
   theme_minimal()
 
-### Extra Feature Analysis 2.2: Loan Duration vs Installment Commitment ###
+## Extra Feature Analysis 1-6: Loan Duration vs Installment Commitment
 # Correlation analysis
 correlation_duration_commitment <- cor(credit_data_clean$duration, credit_data_clean$installment_commitment)
 cat("Analysis 2.2: Correlation between Loan Duration and Installment Commitment: ", correlation_duration_commitment, "\n")
@@ -106,8 +113,7 @@ ggplot(credit_data_clean, aes(x = duration, y = installment_commitment, group = 
        y = "Installment Commitment") +
   theme_minimal()
 
-
-### Extra Feature Analysis 2.3: Existing Credits vs Installment Commitment (Line Plot) ###
+## Extra Feature Analysis 1-7: Existing Credits vs Installment Commitment (Line Plot)
 # Correlation analysis
 correlation_existing_credits_commitment <- cor(credit_data_clean$existing_credits, credit_data_clean$installment_commitment)
 cat("Analysis 2.3: Correlation between Existing Credits and Installment Commitment: ", correlation_existing_credits_commitment, "\n")
@@ -121,4 +127,4 @@ ggplot(credit_data_clean, aes(x = existing_credits, y = installment_commitment, 
   theme_minimal()
 
 # Final output message
-cat("\nAnalysis complete with additional features 2.1, 2.2, and 2.3.")
+cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
