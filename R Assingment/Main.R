@@ -4,10 +4,8 @@
 # Muhammad Hadi, TP077049
 
 # Load necessary libraries
-library(readr)
-library(dplyr)
-library(ggplot2)
-library(tidyr)
+library(tidyverse)
+library(caret)
 
 # Data import
 file_path <- "C:/Users/Wajiz.pk/Downloads/5. credit_risk_classification.csv"
