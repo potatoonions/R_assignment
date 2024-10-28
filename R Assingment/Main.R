@@ -72,7 +72,7 @@ sapply(df, class)
 View(head(df, 100))
 
 
-### Objective 1: To investigate the relationship between installment commitment and credit class. – Muhammad Hadi, TP077049
+### Objective 4: Assess the Effect of Loan Amount and Installment Commitment on Credit Class – Muhammad Hadi, TP077049
 ## Analysis 1-1: Correlation Analysis between 'installment_commitment' and 'credit_amount'
 # Calculating the correlation between installment_commitment and credit_amount
 correlation_result <- cor(df$installment_commitment, df$credit_amount)
