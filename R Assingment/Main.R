@@ -72,7 +72,7 @@ sapply(df, class)
 View(head(df, 100))
 
 
-### Objective 4: Assess the Effect of Loan Amount and Installment Commitment on Credit Class – Muhammad Hadi, TP077049
+### Objective 1: To investigate the relationship between installment commitment and credit class – Muhammad Hadi, TP077049
 ## Analysis 1-1: Correlation Analysis between 'installment_commitment' and 'credit_amount'
 # Calculating the correlation between installment_commitment and credit_amount
 correlation_result <- cor(df$installment_commitment, df$credit_amount)
@@ -191,3 +191,11 @@ ggplot(df, aes(x = existing_credits, y = installment_commitment, group = 1)) +
 # Final output message
 cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
 
+
+### TODO Objective 2: Evaluate the Impact of Employment Duration on Credit Class - Jaeden Loong Deng Ze, TP068347
+
+
+### Objective 3: To Investigate the effects of different credit histories on a person’s credit classification - Keith Lo Ze Hui, TP067663
+
+
+### TODO Objective 4: Assess the Effect of Loan Amount and Installment Commitment on Credit Class - Lim Wen Yi, TP067930
