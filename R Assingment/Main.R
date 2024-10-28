@@ -11,9 +11,8 @@ library(caret)
 
 ### Data Preparation
 ## Data import
-file_path <- "./data/credit_risk_classification.csv"
-df <- read.csv(file_path, row.names = 1, stringsAsFactors = TRUE)
-
+file_path <- "./dataset/credit_risk_classification.csv"
+df <- read.csv(file_path, stringsAsFactors = TRUE, row.names = 1)
 
 ## Cleaning and Preprocessing
 # Remove Duplicates
