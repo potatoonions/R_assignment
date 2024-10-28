@@ -73,6 +73,51 @@ sapply(df, class)
 # Display the first 100 rows of cleaned data
 View(head(df, 100))
 
+## Data Validation (outliers)
+# Visualise Outliers With Boxplot
+# TODO remove this?
+for (col in numeric_columns) {
+  boxplot(
+    df[[col]],
+    main = col, ylab = "Values", col = "lightblue",
+    cex.main = 1.5, cex.lab = 1.2, cex.axis = 1.2
+  )
+}
+
+# Identify And Cap Outliers Using IQR
+detect_outliers <- function(column, cap = FALSE) {
+  q1 <- quantile(column, 0.10, na.rm = TRUE)
+  q3 <- quantile(column, 0.90, na.rm = TRUE)
+  iqr_value <- IQR(column, na.rm = TRUE)
+
+  lower_bound <- q1 - 1.5 * iqr_value
+  upper_bound <- q3 + 1.5 * iqr_value
+
+  outliers <- column[column < lower_bound | column > upper_bound]
+
+  if (cap) {
+    column <- ifelse(column > upper_bound, upper_bound, column)
+    column <- ifelse(column < lower_bound, lower_bound, column)
+  }
+
+  return(outliers)
+}
+
+columns_to_cap <- c(
+  "duration",
+  "credit_amount"
+)
+for (col in numeric_columns) {
+  if (col %in% columns_to_cap) {
+    outliers <- detect_outliers(df[[col]], cap = TRUE)
+    cat("Outliers capped in", col, ":", length(outliers), "\n")
+  } else {
+    outliers <- detect_outliers(df[[col]], cap = FALSE)
+    cat("Outliers not capped in", col, ":", length(outliers), "\n")
+  }
+  cat(outliers, "\n\n")
+}
+
 
 ### Objective 1: To investigate the relationship between installment commitment and credit class – Muhammad Hadi, TP077049
 ## Analysis 1-1: Correlation Analysis between 'installment_commitment' and 'credit_amount'
