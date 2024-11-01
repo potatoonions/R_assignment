@@ -18,7 +18,8 @@ df <- read.csv(file_path, stringsAsFactors = TRUE, row.names = 1)
 # Remove Duplicates
 duplicate_rows <- df[duplicated(df), ]
 cat("Number of duplicate rows:", nrow(duplicate_rows), "\n")
-df <- df |> distinct()
+# TODO are the duplicates actually duplicates?
+# df <- df |> distinct()
 
 # Missing Data Summary
 missing_data_count <- df |>
