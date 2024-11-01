@@ -69,8 +69,6 @@ numeric_columns <- df |>
 print("Column Types:")
 sapply(df, class)
 
-# Display the first 100 rows of cleaned data
-View(head(df, 100))
 
 ## Data Validation (outliers)
 # Visualise Outliers With Boxplot
@@ -116,6 +114,10 @@ for (col in numeric_columns) {
   }
   cat(outliers, "\n\n")
 }
+
+
+# Display the first 100 rows of cleaned data
+View(head(df, 100))
 
 
 ### Objective 1: To investigate the relationship between installment commitment and credit class – Muhammad Hadi, TP077049
