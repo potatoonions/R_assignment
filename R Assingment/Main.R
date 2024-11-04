@@ -61,6 +61,17 @@ for (col in ranged_columns) {
   df[[col]] <- ordered(df[[col]], levels = unique_ranged_values[[col]])
 }
 
+# Ordered Factors
+checking_levels <- c("no checking", "0", "0<=X<200", ">=200")
+savings_levels <- c(
+  "no known savings", "<100", "100<=X<500",
+  "500<=X<10000", ">=1000"
+)
+employment_levels <- c(">=7", "1<=X<4", "4<=X<7", "unemployed", "<1")
+df$checking_status <- ordered(df$checking_status, levels = checking_levels)
+df$savings_status <- ordered(df$savings_status, levels = savings_levels)
+df$employment <- ordered(df$employment, levels = employment_levels)
+
 # List All Numeric Columnns For Later Use
 numeric_columns <- df |>
   select(where(is.numeric)) |>
