@@ -6,7 +6,10 @@
 
 # Load necessary libraries
 library(tidyverse)
+
 library(caret)
+library(corrplot)
+library(sjPlot)
 
 
 ### Data Preparation
@@ -71,6 +74,9 @@ employment_levels <- c(">=7", "1<=X<4", "4<=X<7", "unemployed", "<1")
 df$checking_status <- ordered(df$checking_status, levels = checking_levels)
 df$savings_status <- ordered(df$savings_status, levels = savings_levels)
 df$employment <- ordered(df$employment, levels = employment_levels)
+
+# Correct Typo
+levels(df$savings_status)[levels(df$savings_status) == "500<=X<10000"] <- "500<=X<1000"
 
 # List All Numeric Columnns For Later Use
 numeric_columns <- df |>
@@ -258,4 +264,37 @@ cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
 ### Objective 3: To Investigate the effects of different credit histories on a person’s credit classification - Keith Lo Ze Hui, TP067663
 
 
-### TODO Objective 4: Assess the Effect of Loan Amount and Installment Commitment on Credit Class - Lim Wen Yi, TP067930
+### Objective 4: Assess the Effect of Higher Savings on Credit Class - Lim Wen Yi, TP067930
+
+## Analysis 4-1: Barplot of Credit Class by Savings Status
+ggplot(df, aes(x = savings_status, fill = class)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Credit Class by Savings Status",
+    x = "Savings Status",
+    y = "Count"
+  )
+
+
+## Analysis 4-2: Ordinal Logistic Regression
+model_class_savings <- glm(class ~ savings_status, data = df, family = binomial)
+
+summary(model_class_savings)
+
+plot_model(
+  model_class_savings,
+  type = "pred", terms = c("savings_status"),
+  title = "Ordinal Logistic Regression of Credit Class based on Savings Status",
+  axis.title = list(x = "Savings Status", y = "Probability of Bad Credit")
+)
+
+
+## Analysis 4-3: Chi-square test of independence
+chisq.test(table(df$class, df$savings_status))
+
+
+## Extra Feature Analysis 4-5: Correlation Matrix For Numeric Columns
+corrplot(cor(df[numeric_columns]),
+  method = "circle", type = "upper",
+  tl.srt = 45
+)
