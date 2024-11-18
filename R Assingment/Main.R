@@ -265,15 +265,37 @@ cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
 
 
 ### Objective 4: Assess the Effect of Higher Savings on Credit Class - Lim Wen Yi, TP067930
+# Hypothesis: people with no known savings has a 50% chance of having lower credit class - Lim Wen Yi, TP067930
+# Hypothesis: people with savings higher than 1000 has a 50% change of higher credit class - Lim Wen Yi, TP067930
 
-## Analysis 4-1: Barplot of Credit Class by Savings Status
+
+## TODO Exploratory Data Analysis 4-1: Correlation Matrix For Numeric Columns
+corrplot(cor(df[numeric_columns]),
+  method = "circle", type = "upper",
+  tl.srt = 45
+)
+
+
+## Analysis 4-1: Stacked Barplot
 ggplot(df, aes(x = savings_status, fill = class)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
   labs(
-    title = "Credit Class by Savings Status",
+    title = "Proportion of Credit Class by Savings Status",
     x = "Savings Status",
-    y = "Count"
-  )
+    y = "Proportion"
+  ) +
+  theme_minimal()
+
+## Analysis 4-2: Violin Plot
+voilin_plot <- ggplot(df, aes(x = savings_status, y = age, fill = class)) +
+  geom_violin(alpha = 0.8) +
+  labs(
+    title = "Age Distribution by Credit Class and Savings Status",
+    x = "Savings Status",
+    y = "Age"
+  ) +
+  theme_minimal()
 
 
 ## Analysis 4-2: Ordinal Logistic Regression
@@ -292,9 +314,4 @@ plot_model(
 ## Analysis 4-3: Chi-square test of independence
 chisq.test(table(df$class, df$savings_status))
 
-
-## Extra Feature Analysis 4-5: Correlation Matrix For Numeric Columns
-corrplot(cor(df[numeric_columns]),
-  method = "circle", type = "upper",
-  tl.srt = 45
-)
+### Objective 5: Assess the Effect of Higher Savings on Credit Class - Lim Wen Yi, TP067930
