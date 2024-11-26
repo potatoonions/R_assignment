@@ -265,18 +265,10 @@ cat("\nAnalysis complete with additional features 1-5, 1-6, and 1-7.")
 
 
 ### Objective 4: Assess the Effect of Higher Savings on Credit Class - Lim Wen Yi, TP067930
-# Hypothesis: people with no known savings has a 50% chance of having lower credit class - Lim Wen Yi, TP067930
-# Hypothesis: people with savings higher than 1000 has a 50% change of higher credit class - Lim Wen Yi, TP067930
+# Hypothesis: people with no known savings has a 50% chance of having lower credit class
+# Hypothesis: people with savings higher than 1000 has a 50% change of higher credit class
 
-
-## TODO Exploratory Data Analysis 4-1: Correlation Matrix For Numeric Columns
-corrplot(cor(df[numeric_columns]),
-  method = "circle", type = "upper",
-  tl.srt = 45
-)
-
-
-## Analysis 4-1: Stacked Barplot
+## Exploratory Data Analysis 4-1: Stacked Barplot
 ggplot(df, aes(x = savings_status, fill = class)) +
   geom_bar(position = "fill") +
   scale_y_continuous(labels = scales::percent) +
@@ -287,18 +279,19 @@ ggplot(df, aes(x = savings_status, fill = class)) +
   ) +
   theme_minimal()
 
-## Analysis 4-2: Violin Plot
-voilin_plot <- ggplot(df, aes(x = savings_status, y = age, fill = class)) +
-  geom_violin(alpha = 0.8) +
+
+## Exploratory Data Analysis 4-2: Regular Barplot
+ggplot(df, aes(x = savings_status, fill = class)) +
+  geom_bar(position = "dodge") +
   labs(
-    title = "Age Distribution by Credit Class and Savings Status",
+    title = "Credit Class by Savings Status",
     x = "Savings Status",
-    y = "Age"
+    y = "Count"
   ) +
   theme_minimal()
 
 
-## Analysis 4-2: Ordinal Logistic Regression
+## Exploratory Data Analysis 4-3: Ordinal Logistic Regression
 model_class_savings <- glm(class ~ savings_status, data = df, family = binomial)
 
 summary(model_class_savings)
@@ -306,7 +299,7 @@ summary(model_class_savings)
 plot_model(
   model_class_savings,
   type = "pred", terms = c("savings_status"),
-  title = "Ordinal Logistic Regression of Credit Class based on Savings Status",
+  title = "Ordinal Logistic Regression, Credit Class vs Savings Status",
   axis.title = list(x = "Savings Status", y = "Probability of Bad Credit")
 )
 
